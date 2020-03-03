@@ -24,8 +24,7 @@ import java.util.NoSuchElementException;
 
 import org.apache.commons.text.matcher.StringMatcher;
 import org.apache.commons.text.matcher.StringMatcherFactory;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Tokenizes a string based on delimiters (separators) and supporting quoting and ignored character concepts.
@@ -168,9 +167,10 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *            the text to parse
      * @return a new tokenizer instance which parses Comma Separated Value strings
      */
-    /*getCSVClone() might return null as it calls clone() which might return null if an
-     * exception is thrown, a probable error in apache commons-text*/
-    @SuppressWarnings("nullness")
+    /*`getCSVClone()` might return `null` as it calls `clone()` on line number 1193
+     * which returns null if an exception is thrown and caught,
+     * a probable error in apache commons-text*/
+    @SuppressWarnings("dereference.of.nullable")
     public static @Nullable StringTokenizer getCSVInstance(final String input) {
         final StringTokenizer tok = getCSVClone();
         tok.reset(input);
@@ -186,9 +186,10 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *            the text to parse
      * @return a new tokenizer instance which parses Comma Separated Value strings
      */
-    /*getCSVClone() might return null as it calls clone() which might return null if an
-     * exception is thrown, a probable error in apache commons-text*/
-    @SuppressWarnings("nullness")
+    /*`getCSVClone()` might return `null` as it calls `clone()` on line number 1193
+     * which returns null if an exception is thrown and caught,
+     * a probable error in apache commons-text*/
+    @SuppressWarnings("dereference.of.nullable")
     public static @Nullable StringTokenizer getCSVInstance(final char[] input) {
         final StringTokenizer tok = getCSVClone();
         tok.reset(input);
@@ -224,9 +225,10 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *            the string to parse
      * @return a new tokenizer instance which parses Tab Separated Value strings.
      */
-    /*getTSVClone() might return null as it calls clone() which might return null if an
-     * exception is thrown, a probable error in apache commons-text*/
-    @SuppressWarnings("nullness")
+    /*`getTSVClone()` might return `null` as it calls `clone()` on line number 1193
+     *  which returns null if an exception is thrown and caught,
+     *  a probable error in apache commons-text*/
+    @SuppressWarnings("dereference.of.nullable")
     public static @Nullable StringTokenizer getTSVInstance(final String input) {
         final StringTokenizer tok = getTSVClone();
         tok.reset(input);
@@ -241,9 +243,10 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *            the string to parse
      * @return a new tokenizer instance which parses Tab Separated Value strings.
      */
-    /*getTSVClone() might return null as it calls clone() which might return null if an
-     * exception is thrown, a probable error in apache commons-text*/
-    @SuppressWarnings("nullness")
+    /*`getTSVClone()` might return `null` as it calls `clone()` on line number 1193
+     *  which returns null if an exception is thrown and caught,
+     *  a probable error in apache commons-text*/
+    @SuppressWarnings("dereference.of.nullable")
     public static @Nullable StringTokenizer getTSVInstance(final char[] input) {
         final StringTokenizer tok = getTSVClone();
         tok.reset(input);
@@ -257,8 +260,11 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      * <p>
      * This constructor is normally used with {@link #reset(String)}.
      */
-    /* [2] According to the code, tokens need not be initialized in this constructor */
-    @SuppressWarnings("nullness")
+    /* [2] According to the code, `tokens` need not be initialized in this constructor,
+     * because there are methods in the code which do not require `tokens` to be initialized,
+     * `tokens` variable is appropriately handled in `checkTokenized()`
+     * function at line number 698 */
+    @SuppressWarnings("initialization.fields.uninitialized")
     public StringTokenizer() {
         super();
         this.chars = null;
@@ -271,7 +277,7 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *            the string which is to be parsed
      */
     /* Due to reason [2] */
-    @SuppressWarnings("nullness")
+    @SuppressWarnings("initialization.fields.uninitialized")
     public StringTokenizer(final String input) {
         super();
         if (input != null) {
@@ -290,8 +296,10 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *            the field delimiter character
      */
     /* [1] Shouldn't be calling an instance method from the constructor,
-     * probable issue in apache commons-text*/
-    @SuppressWarnings("nullness")
+     * it is not safe to call an instance method from an constructor because an object
+     * is under initialization while in a constructor, also complex processing in constructor
+     * affects testability negatively, probable issue in apache commons-text*/
+    @SuppressWarnings("method.invocation.invalid")
     public StringTokenizer(final String input, final char delim) {
         this(input);
         setDelimiterChar(delim);
@@ -306,7 +314,7 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *            the field delimiter string
      */
     /* Due to reason [1] */
-    @SuppressWarnings("nullness")
+    @SuppressWarnings("method.invocation.invalid")
     public StringTokenizer(final String input, final String delim) {
         this(input);
         setDelimiterString(delim);
@@ -321,7 +329,7 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *            the field delimiter matcher
      */
     /* Due to reason [1] */
-    @SuppressWarnings("nullness")
+    @SuppressWarnings("method.invocation.invalid")
     public StringTokenizer(final String input, final StringMatcher delim) {
         this(input);
         setDelimiterMatcher(delim);
@@ -339,7 +347,7 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *            the field quoted string character
      */
     /* Due to reason [1] */
-    @SuppressWarnings("nullness")
+    @SuppressWarnings("method.invocation.invalid")
     public StringTokenizer(final String input, final char delim, final char quote) {
         this(input, delim);
         setQuoteChar(quote);
@@ -357,7 +365,7 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *            the field quoted string matcher
      */
     /* Due to reason [1] */
-    @SuppressWarnings("nullness")
+    @SuppressWarnings("method.invocation.invalid")
     public StringTokenizer(final String input, final StringMatcher delim, final StringMatcher quote) {
         this(input, delim);
         setQuoteMatcher(quote);
@@ -370,7 +378,7 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *            the string which is to be parsed, not cloned
      */
     /* Due to reason [2] */
-    @SuppressWarnings("nullness")
+    @SuppressWarnings("initialization.fields.uninitialized")
     public StringTokenizer(final char[] input) {
         super();
         if (input == null) {
@@ -389,7 +397,7 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *            the field delimiter character
      */
     /* Due to reason [1] */
-    @SuppressWarnings("nullness")
+    @SuppressWarnings("method.invocation.invalid")
     public StringTokenizer(final char[] input, final char delim) {
         this(input);
         setDelimiterChar(delim);
@@ -404,7 +412,7 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *            the field delimiter string
      */
     /* Due to reason [1] */
-    @SuppressWarnings("nullness")
+    @SuppressWarnings("method.invocation.invalid")
     public StringTokenizer(final char[] input, final String delim) {
         this(input);
         setDelimiterString(delim);
@@ -419,7 +427,7 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *            the field delimiter matcher
      */
     /* Due to reason [1] */
-    @SuppressWarnings("nullness")
+    @SuppressWarnings("method.invocation.invalid")
     public StringTokenizer(final char[] input, final StringMatcher delim) {
         this(input);
         setDelimiterMatcher(delim);
@@ -437,7 +445,7 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *            the field quoted string character
      */
     /* Due to reason [1] */
-    @SuppressWarnings("nullness")
+    @SuppressWarnings("method.invocation.invalid")
     public StringTokenizer(final char[] input, final char delim, final char quote) {
         this(input, delim);
         setQuoteChar(quote);
@@ -455,7 +463,7 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *            the field quoted string character
      */
     /* Due to reason [1] */
-    @SuppressWarnings("nullness")
+    @SuppressWarnings("method.invocation.invalid")
     public StringTokenizer(final char[] input, final StringMatcher delim, final StringMatcher quote) {
         this(input, delim);
         setQuoteMatcher(quote);
@@ -530,7 +538,7 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      */
     /*'tokens' can be null here as this function resets the variable for another tokenization,
      * we can't make 'tokens' Nullable because at other places it needs to be NotNull*/
-    @SuppressWarnings("nullness")
+    @SuppressWarnings("assignment.type.incompatible")
     public StringTokenizer reset() {
         tokenPos = 0;
         tokens = null;
@@ -753,7 +761,7 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
     /* list.add(null) should work, Missing JDK annotation, link to pull requests below
     * https://github.com/typetools/checker-framework/pull/3103
     * https://github.com/typetools/jdk/pull/29 */
-    @SuppressWarnings("nullness")
+    @SuppressWarnings("argument.type.incompatible")
     private void addToken(final List<String> list, @Nullable String tok) {
         if (tok == null || tok.length() == 0) {
             if (isIgnoreEmptyTokens()) {
@@ -1178,9 +1186,9 @@ public class StringTokenizer implements ListIterator<String>, Cloneable {
      *
      * @return a new instance of this Tokenizer which has been reset.
      */
-    /*clone() might return null if an exception is thrown,
+    /*`clone()` might return null if an exception is thrown and caught,
      * a probable error in apache commons-text*/
-    @SuppressWarnings("nullness")
+    @SuppressWarnings("override.return.invalid")
     @Override
     public @Nullable Object clone() {
         try {
